@@ -18,9 +18,21 @@ async function connectDB() {
   }
 }
 
-await connectDB();
+const client = await connectDB();
+const db = client.db("booknookdb");
+const allbookCollection = db.collection("allbooks");
+const categoriesCollection = db.collection("categoriesName")
 
 
+app.get('/api/all-books',async (req,res)=>{
+    const data = await allbookCollection.find({}).toArray();
+    res.send(data);
+})
+
+app.get('/api/categories',async(req,res)=>{
+    const data = await categoriesCollection.find({}).toArray();
+    res.send(data);
+})
 
 
 app.listen(PORT,()=>{
