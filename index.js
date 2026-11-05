@@ -6,6 +6,7 @@ import cors from 'cors'
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(cors());
+app.use(express.json())
 
 async function connectDB() {
   const client = new MongoClient(process.env.MONGODB_URI);
@@ -45,6 +46,14 @@ app.get('/api/all-books/:id',async (req,res)=>{
     res.send(data);
 })
 
+
+app.post("/api/add-books",async (req,res)=>{
+    const data = await req.body;
+    console.log(data)
+
+    const result = await allbookCollection.insertOne(data);
+    res.send("Added succesfully",result);
+})
 
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
