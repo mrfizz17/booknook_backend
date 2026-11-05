@@ -52,8 +52,22 @@ app.post("/api/add-books",async (req,res)=>{
     console.log(data)
 
     const result = await allbookCollection.insertOne(data);
-    res.send("Added succesfully",result);
+    res.send(result);
 })
+
+app.get("/api/my-books/:email",async (req,res)=>{
+    const {email} = await req.params;
+
+    console.log(email)
+
+    const books = await allbookCollection.find({
+        userEmail:email
+    }).toArray()
+
+    console.log(books);
+    res.send(books)
+})
+
 
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
