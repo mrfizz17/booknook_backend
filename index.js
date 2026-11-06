@@ -69,6 +69,18 @@ app.get("/api/my-books/:email",async (req,res)=>{
 })
 
 
+app.patch("/api/my-books/update/:id",async(req,res)=>{
+    const {id}=  req.params
+    const updateData = req.body
+
+    const data = await allbookCollection.updateOne(
+        {_id:new ObjectId(id)},
+        {$set: updateData}
+    )
+
+    res.send(data);
+})
+
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
 })
