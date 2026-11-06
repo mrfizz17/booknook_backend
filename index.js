@@ -23,7 +23,7 @@ const client = await connectDB();
 const db = client.db("booknookdb");
 const allbookCollection = db.collection("allbooks");
 const categoriesCollection = db.collection("categoriesName")
-
+const borrowCollection = db.collection("borrow")
 
 app.get('/api/all-books',async (req,res)=>{
     const data = await allbookCollection.find({}).toArray();
@@ -89,6 +89,49 @@ app.delete("/api/my-books/delete/:id",async(req,res)=>{
     )
 
     res.send(result);
+
+})
+
+
+app.post("/api/my-books/borrow/:id",async(req,res)=>{
+    const {id} = req.params;
+    const data = req.body
+    
+    const result = await allbookCollection.findOne(
+        {_id:new ObjectId(id),
+         count : {$gt:0}
+        }
+    )
+
+    const borrowed = await borrowCollection.findOne({
+        BorrowedUserEmail:data.BorrowedUserEmail,
+        title:data.title
+    })
+
+    if(borrowed){
+        res.send({
+            msg : 'You have already borrowed this book ! '
+        });
+        return;
+    }
+
+    
+    if(result){
+        const response = await borrowCollection.insertOne(data);
+        const response2= await allbookCollection.updateOne(
+            {_id:new ObjectId(id)},
+            {$inc : {count :-1}}
+        )
+        res.send({msg: 'Borrowed Succesfully' ,response,response2});
+
+        return;
+    };
+    
+    res.send({
+        msg:' All Copies are borrowed'
+    })
+
+ 
 
 })
 
