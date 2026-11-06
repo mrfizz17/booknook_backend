@@ -81,6 +81,17 @@ app.patch("/api/my-books/update/:id",async(req,res)=>{
     res.send(data);
 })
 
+app.delete("/api/my-books/delete/:id",async(req,res)=>{
+    const {id} = req.params;
+    
+    const result = await allbookCollection.deleteOne(
+        {_id:new ObjectId(id)}
+    )
+
+    res.send(result);
+
+})
+
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
 })
