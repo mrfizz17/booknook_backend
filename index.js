@@ -135,6 +135,42 @@ app.post("/api/my-books/borrow/:id",async(req,res)=>{
 
 })
 
+app.get("/api/my-borrowed/:email",async(req,res)=>{
+    const {email } = req.params;
+
+    const result = await borrowCollection.find({
+        BorrowedUserEmail:email
+    }).toArray()
+
+    res.send(result);
+})
+
+app.delete("/api/my-borrows/delete/:id/:email",async(req,res)=>{
+    const {id,email} = req.params;
+
+    const result2 = await borrowCollection.findOne({
+        _id:new ObjectId(id)
+    })
+
+    // console.log(result2)
+
+    const updateAllBook = await allbookCollection.updateOne(
+        {_id: new ObjectId(result2.OldId)},
+        {$inc: {count: +1}}
+    )
+
+    const result= await borrowCollection.deleteOne(
+        {_id:new ObjectId(id),
+          BorrowedUserEmail:email
+        }
+    )
+
+    
+
+    res.send({msg:'You Returned Book Succesfully',result,updateAllBook});
+
+})
+
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
 })
