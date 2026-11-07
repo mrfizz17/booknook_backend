@@ -52,7 +52,7 @@ app.post("/api/add-books",async (req,res)=>{
     console.log(data)
 
     const result = await allbookCollection.insertOne(data);
-    res.send(result);
+    res.send({msg:'New Book Added Succesfully', result});
 })
 
 app.get("/api/my-books/:email",async (req,res)=>{
@@ -78,7 +78,7 @@ app.patch("/api/my-books/update/:id",async(req,res)=>{
         {$set: updateData}
     )
 
-    res.send(data);
+    res.send({msg:'Book Updated Succesfully',data});
 })
 
 app.delete("/api/my-books/delete/:id",async(req,res)=>{
@@ -88,7 +88,7 @@ app.delete("/api/my-books/delete/:id",async(req,res)=>{
         {_id:new ObjectId(id)}
     )
 
-    res.send(result);
+    res.send({msg:'Book Removed From The Library',result});
 
 })
 
