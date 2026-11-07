@@ -173,4 +173,6 @@ app.delete("/api/my-borrows/delete/:id/:email",async(req,res)=>{
 
 app.listen(PORT,()=>{
     console.log(`Sever is running at port ${PORT}`)
-})
+});
+
+export default app;
