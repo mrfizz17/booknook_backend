@@ -135,10 +135,10 @@ app.post("/api/my-books/borrow/:id",verifyToken,async(req,res)=>{
     })
 
     if(borrowed){
-        res.send({
+        return res.status(401).json({
             msg : 'You have already borrowed this book ! '
         });
-        return;
+        
     }
 
     
