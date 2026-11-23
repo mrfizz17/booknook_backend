@@ -114,7 +114,13 @@ app.delete("/api/my-books/delete/:id",verifyToken,async(req,res)=>{
         {_id:new ObjectId(id)}
     )
 
-    res.send({msg:'Book Removed From The Library',result});
+    const borrowDelete = await borrowCollection.deleteMany(
+        {OldId: id}
+    )
+
+    // console.log(borrowDelete);
+
+    res.send({msg:'Book Removed From The Library',result,borrowDelete});
 
 })
 
